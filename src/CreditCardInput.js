@@ -30,6 +30,12 @@ const s = StyleSheet.create({
   input: {
     height: 40,
   },
+  row: {
+    paddingVertical: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+
+  },
 });
 
 const CVC_INPUT_WIDTH = 70;
@@ -143,7 +149,7 @@ export default class CreditCardInput extends Component {
       cardImageFront, cardImageBack, inputContainerStyle,
       values: { number, expiry, cvc, name, type }, focused,
       allowScroll, requiresName, requiresCVC, requiresPostalCode,
-      cardScale, cardFontFamily, cardBrandIcons,
+      cardScale, cardFontFamily, cardBrandIcons, horizontal
     } = this.props;
 
     return (
@@ -160,18 +166,20 @@ export default class CreditCardInput extends Component {
             expiry={expiry}
             cvc={cvc} />
         <ScrollView ref="Form"
-            horizontal
+            horizontal={horizontal}
             keyboardShouldPersistTaps="always"
             scrollEnabled={allowScroll}
             showsHorizontalScrollIndicator={false}
             style={s.form}>
           <CCInput {...this._inputProps("number")}
               containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} />
-          <CCInput {...this._inputProps("expiry")}
-              containerStyle={[s.inputContainer, inputContainerStyle, { width: EXPIRY_INPUT_WIDTH }]} />
-          { requiresCVC &&
-            <CCInput {...this._inputProps("cvc")}
-                containerStyle={[s.inputContainer, inputContainerStyle, { width: CVC_INPUT_WIDTH }]} /> }
+          <View style={!horizontal? s.row :null}>
+            <CCInput {...this._inputProps("expiry")}
+                containerStyle={[s.inputContainer, inputContainerStyle, { width: EXPIRY_INPUT_WIDTH }]} />
+            { requiresCVC &&
+              <CCInput {...this._inputProps("cvc")}
+                  containerStyle={[s.inputContainer, inputContainerStyle, { width: CVC_INPUT_WIDTH }]} /> }
+          </View>
           { requiresName &&
             <CCInput {...this._inputProps("name")}
                 keyboardType="default"
